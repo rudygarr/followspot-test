@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Follow Spot Test Ground</title>
+<style>
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    touch-action: none;
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  body {
+    cursor: none;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  #app {
+    position: fixed;
+    inset: 0;
+    background: #000;
+  }
+  #stage {
+    position: absolute;
+    inset: 0;
+    background: #000;
+  }
+  #spot {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    will-change: left, top, width, height, opacity, filter, background;
+    box-shadow: 0 0 35px rgba(255,255,255,0.18);
+  }
+  #hint {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+    padding: 2rem;
+    font-size: clamp(14px, 2.4vw, 24px);
+    line-height: 1.4;
+    transition: opacity 220ms ease;
+  }
+  .hidden { opacity: 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage"></div>
+  <div id="spot"></div>
+  <div id="hint">Tap/click and hold to show the spot.<br>Double‑tap / double‑click to latch it on or off.</div>
+</div>
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const spot = document.getElementById('spot');
+  const hint = document.getElementById('hint');
+
+  // 3000K to 6000K presets (warm -> cool)
+  const temperatures = [
+    { k: 3000, color: [255, 180, 107] },
+    { k: 3750, color: [255, 214, 170] },
+    { k: 4500, color: [255, 244, 229] },
+    { k: 5250, color: [241, 246, 255] },
+    { k: 6000, color: [214, 230, 255] },
+  ];
+
+  const state = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+    latched: false,
+    holdVisible: false,
+    sizePct: 0.18, // 18% of screen's min dimension
+    targetSizePct: 0.18,
+    tempIndex: 2,
+    targetTempIndex: 2,
+    fullscreenRequested: false,
+    leftDown: false,
+    rightDown: false,
+    pointerId: null,
+    twoFinger: false,
+    gestureMid: null,
+    lastTapTime: 0,
+    lastTapX: 0,
+    lastTapY: 0,
+  };
+
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  function currentDiameterPx() {
+    return Math.min(window.innerWidth, window.innerHeight) * state.sizePct;
+  }
+
+  function spotVisible() {
+    return state.latched || state.holdVisible;
+  }
+
+  function colorForTempIndex(t) {
+    const idx = clamp(t, 0, temperatures.length - 1);
+    const c = temperatures[idx].color;
+    return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+  }
+
+  function render() {
+    // Smooth, slow-ish movement toward targets for size/temp only.
+    state.sizePct = lerp(state.sizePct, state.targetSizePct, 0.12);
+    state.tempIndex = lerp(state.tempIndex, state.targetTempIndex, 0.12);
+
+    const d = currentDiameterPx();
+
+    // Interpolate color between nearby preset stops.
+    const low = Math.floor(state.tempIndex);
+    const high = Math.ceil(state.tempIndex);
+    const mix = state.tempIndex - low;
+    const c1 = temperatures[low].color;
+    const c2 = temperatures[high].color;
+    const color = [
+      Math.round(lerp(c1[0], c2[0], mix)),
+      Math.round(lerp(c1[1], c2[1], mix)),
+      Math.round(lerp(c1[2], c2[2], mix)),
+    ];
+
+    spot.style.left = `${state.x}px`;
+    spot.style.top = `${state.y}px`;
+    spot.style.width = `${d}px`;
+    spot.style.height = `${d}px`;
+    spot.style.opacity = spotVisible() ? '1' : '0';
+    spot.style.background = `radial-gradient(circle, rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.98) 0%, rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.72) 34%, rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.22) 62%, rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.0) 100%)`;
+    spot.style.filter = `blur(${Math.max(10, d * 0.08)}px)`;
+
+    if (spotVisible() || document.fullscreenElement) {
+      hint.classList.add('hidden');
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  async function enterFullscreenMaybe() {
+    if (state.fullscreenRequested) return;
+    state.fullscreenRequested = true;
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (_) {
+      // Ignore: browser may refuse.
+    }
+  }
+
+  function setPos(clientX, clientY) {
+    state.x = clamp(clientX, 0, window.innerWidth);
+    state.y = clamp(clientY, 0, window.innerHeight);
+  }
+
+  function singlePressStart(clientX, clientY) {
+    setPos(clientX, clientY);
+    state.holdVisible = !state.latched;
+  }
+
+  function singlePressMove(clientX, clientY) {
+    setPos(clientX, clientY);
+  }
+
+  function singlePressEnd() {
+    state.holdVisible = false;
+  }
+
+  function toggleLatched(clientX, clientY) {
+    setPos(clientX, clientY);
+    state.latched = !state.latched;
+    state.holdVisible = false;
+  }
+
+  // --- Mouse handling ---
+  stage.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  stage.addEventListener('mousedown', async (e) => {
+    await enterFullscreenMaybe();
+    const now = performance.now();
+
+    // Double left click toggles latch.
+    if (e.button === 0) {
+      const isDouble = (now - state.lastTapTime < 320) && Math.hypot(e.clientX - state.lastTapX, e.clientY - state.lastTapY) < 28;
+      state.lastTapTime = now; state.lastTapX = e.clientX; state.lastTapY = e.clientY;
+      if (isDouble) {
+        toggleLatched(e.clientX, e.clientY);
+        return;
+      }
+    }
+
+    if (e.button === 0) state.leftDown = true;
+    if (e.button === 2) state.rightDown = true;
+
+    // Left only = show while held
+    if (state.leftDown && !state.rightDown) {
+      singlePressStart(e.clientX, e.clientY);
+    }
+  });
+
+  stage.addEventListener('mousemove', (e) => {
+    // Both left+right down: gesture mode
+    if (state.leftDown && state.rightDown) {
+      // Up/down changes size slowly; left/right changes temperature slowly.
+      state.targetSizePct = clamp(state.targetSizePct - (e.movementY * 0.0009), 0.05, 0.50);
+      state.targetTempIndex = clamp(state.targetTempIndex + (e.movementX * 0.01), 0, temperatures.length - 1);
+      if (spotVisible()) setPos(e.clientX, e.clientY);
+      return;
+    }
+
+    if (state.leftDown && !state.rightDown) {
+      singlePressMove(e.clientX, e.clientY);
+    }
+  });
+
+  window.addEventListener('mouseup', (e) => {
+    if (e.button === 0) state.leftDown = false;
+    if (e.button === 2) state.rightDown = false;
+    if (!state.leftDown) singlePressEnd();
+  });
+
+  // --- Touch handling ---
+  stage.addEventListener('touchstart', async (e) => {
+    e.preventDefault();
+    await enterFullscreenMaybe();
+
+    const touches = e.touches;
+    if (touches.length === 1) {
+      const t = touches[0];
+      const now = performance.now();
+      const isDouble = (now - state.lastTapTime < 320) && Math.hypot(t.clientX - state.lastTapX, t.clientY - state.lastTapY) < 36;
+      state.lastTapTime = now; state.lastTapX = t.clientX; state.lastTapY = t.clientY;
+      if (isDouble) {
+        toggleLatched(t.clientX, t.clientY);
+        return;
+      }
+      state.twoFinger = false;
+      singlePressStart(t.clientX, t.clientY);
+    } else if (touches.length === 2) {
+      state.twoFinger = true;
+      state.holdVisible = false;
+      const t1 = touches[0];
+      const t2 = touches[1];
+      const midX = (t1.clientX + t2.clientX) / 2;
+      const midY = (t1.clientY + t2.clientY) / 2;
+      state.gestureMid = { x: midX, y: midY };
+      if (spotVisible()) setPos(midX, midY);
+    }
+  }, { passive: false });
+
+  stage.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const touches = e.touches;
+    if (touches.length === 1 && !state.twoFinger) {
+      const t = touches[0];
+      singlePressMove(t.clientX, t.clientY);
+    } else if (touches.length === 2) {
+      const t1 = touches[0];
+      const t2 = touches[1];
+      const midX = (t1.clientX + t2.clientX) / 2;
+      const midY = (t1.clientY + t2.clientY) / 2;
+      if (state.gestureMid) {
+        const dx = midX - state.gestureMid.x;
+        const dy = midY - state.gestureMid.y;
+        state.targetTempIndex = clamp(state.targetTempIndex + (dx * 0.01), 0, temperatures.length - 1);
+        state.targetSizePct = clamp(state.targetSizePct - (dy * 0.0009), 0.05, 0.50);
+      }
+      state.gestureMid = { x: midX, y: midY };
+      if (spotVisible()) setPos(midX, midY);
+    }
+  }, { passive: false });
+
+  stage.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 0) {
+      state.twoFinger = false;
+      state.gestureMid = null;
+      singlePressEnd();
+    } else if (e.touches.length === 1) {
+      // If one finger remains after a two-finger gesture, do not immediately show.
+      state.twoFinger = false;
+      state.gestureMid = null;
+    }
+  }, { passive: false });
+
+  stage.addEventListener('touchcancel', () => {
+    state.twoFinger = false;
+    state.gestureMid = null;
+    singlePressEnd();
+  }, { passive: false });
+
+  window.addEventListener('resize', () => {
+    state.x = clamp(state.x, 0, window.innerWidth);
+    state.y = clamp(state.y, 0, window.innerHeight);
+  });
+
+  requestAnimationFrame(render);
+})();
+</script>
+</body>
+</html>
