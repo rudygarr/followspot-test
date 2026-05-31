@@ -1,25 +1,123 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spot App</title>
-<style>
-body {background:#000;color:#fff;margin:0;font-family:-apple-system,system-ui;text-align:center;}
-.container {display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;gap:20px;}
-img {width:120px;}
-h1 {font-size:40px;margin:0;}
-p {opacity:.7;margin:0;}
-a.button {padding:14px 24px;border:1px solid #fff;border-radius:999px;color:#fff;text-decoration:none;margin-top:10px;}
-a.button:hover {background:#fff;color:#000;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spot App</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div class="container">
-<img src="logo.png" alt="logo" />
-<h1>Spot App</h1>
-<p>Turn any projector into a follow spot</p>
-<a class="button" href="demo.html" target="_blank">Try Demo</a>
-</div>
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <img src="logo.webp" alt="Spot App logo" class="brand-logo" />
+      <span class="brand-name">Spot App</span>
+    </a>
+    <nav class="nav">
+      <a href="demo.html" target="_blank">Try Demo</a>
+      <a href="#video">Watch Video</a>
+      <a href="#download" class="nav-pill">Download</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section">
+      <div class="hero-beam"></div>
+      <div class="hero-floor"></div>
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Projection lighting, simplified</p>
+        <h1>Turn any projector<br>into a follow spot.</h1>
+        <p class="subhead">Simple. Powerful. Instant.</p>
+        <div class="cta-row">
+          <a class="button button-primary" href="demo.html" target="_blank">Try Demo</a>
+          <a class="button button-secondary" href="#video">Watch Video</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement section-tight reveal">
+      <h2>No expensive lights. <span>No extra crew.</span></h2>
+    </section>
+
+    <section class="statement section-tight reveal">
+      <h2>Use the gear you already have.</h2>
+    </section>
+
+    <section id="video" class="video-section reveal">
+      <div class="video-shell">
+        <div class="video-copy">
+          <p class="eyebrow">See Spot in action</p>
+          <h3>A practical solution to a real production problem.</h3>
+        </div>
+        <div class="video-frame">
+          <iframe src="https://www.youtube.com/embed/JYsfu9ryuG0?rel=0" title="Spot App demonstration video" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="use-cases reveal">
+      <p class="eyebrow">Built for real spaces</p>
+      <div class="card-grid">
+        <article class="card">
+          <h4>Schools</h4>
+          <p>For performances, assemblies, and events that need a simple spotlight without buying extra gear.</p>
+        </article>
+        <article class="card">
+          <h4>Churches</h4>
+          <p>Highlight a speaker, vocalist, or mic position using a projector you may already have.</p>
+        </article>
+        <article class="card">
+          <h4>Small Venues</h4>
+          <p>Get focused stage lighting for occasional events without a dedicated follow spot system.</p>
+        </article>
+        <article class="card">
+          <h4>Live Events</h4>
+          <p>A fast, practical lighting tool for spaces that need better production value on a realistic budget.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="proof reveal">
+      <div class="proof-image">
+        <div class="proof-beam"></div>
+        <div class="proof-floor"></div>
+        <div class="proof-device"></div>
+      </div>
+      <div class="proof-copy">
+        <p class="eyebrow">Try the concept first</p>
+        <h3>Start in the browser.<br>Then take it further in the app.</h3>
+        <p>The web demo is a fast way to understand the control feel. The full app is where real testing and real use happen.</p>
+        <a class="button button-primary" href="demo.html" target="_blank">Open Demo</a>
+      </div>
+    </section>
+
+    <section id="download" class="download reveal">
+      <p class="eyebrow">Ready when you are</p>
+      <h3>Try the demo. Get the app.</h3>
+      <p class="download-copy">App Store and platform links can go here when they’re ready.</p>
+      <div class="download-row">
+        <a class="download-pill" href="#" aria-disabled="true">App Store Placeholder</a>
+        <a class="download-pill" href="#" aria-disabled="true">Platform Placeholder</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>© Spot App</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy Placeholder</a>
+      <a href="#">Support Placeholder</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>

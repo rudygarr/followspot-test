@@ -1,46 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spot Demo</title>
-<style>
-body {margin:0;background:#000;overflow:hidden;}
-#spot {position:absolute;border-radius:50%;pointer-events:none;
-background:radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,.7) 60%, rgba(255,255,255,0) 100%);
-width:200px;height:200px;opacity:0;}
-#overlay {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-family:-apple-system;text-align:center;}
-button {padding:10px 20px;border:1px solid #fff;background:none;color:#fff;border-radius:999px;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spot App Demo</title>
+  <style>
+    body{margin:0;background:#000;color:#fff;font-family:-apple-system,system-ui;display:grid;place-items:center;min-height:100vh}
+    .wrap{max-width:760px;padding:32px;text-align:center}
+    h1{font-size:clamp(2.2rem,6vw,4rem);margin:0 0 12px;letter-spacing:-0.05em}
+    p{margin:0 0 18px;color:rgba(255,255,255,.72);line-height:1.6}
+    .box{margin-top:20px;padding:24px;border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(255,255,255,.03)}
+  </style>
 </head>
 <body>
-<div id="overlay">Click to start demo</div>
-<div id="spot"></div>
-<script>
-const spot = document.getElementById('spot');
-const overlay = document.getElementById('overlay');
-let on=false;
-
-window.addEventListener('click',()=>{
-  overlay.style.display='none';
-  on=!on;
-  if(on) spot.style.opacity=1;
-});
-
-window.addEventListener('mousemove',(e)=>{
-  if(!on) return;
-  spot.style.left=e.clientX+'px';
-  spot.style.top=e.clientY+'px';
-});
-
-window.addEventListener('wheel',(e)=>{
-  if(!on) return;
-  let size = spot.offsetWidth;
-  size += -e.deltaY * 0.2;
-  size = Math.max(50, Math.min(600, size));
-  spot.style.width=size+'px';
-  spot.style.height=size+'px';
-});
-</script>
+  <div class="wrap">
+    <h1>Spot Demo</h1>
+    <p>Replace this placeholder with your current working demo.html.</p>
+    <div class="box">
+      <p>This bundle is focused on the product website first, exactly as requested.</p>
+      <p>Keep your current demo file if you want the existing interaction to remain live.</p>
+    </div>
+  </div>
 </body>
 </html>
