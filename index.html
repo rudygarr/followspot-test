@@ -1,41 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Spot App</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spot App — Turn any projector into a follow spot</title>
+  <meta name="description" content="Spot App turns the projector you already have into a simple way to guide attention on stage." />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Spot App home">
+      <span class="brand-mark">●</span>
+      <span>Spot App</span>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#compare">Compare</a>
+      <a href="#proof">See it work</a>
+      <a href="demo.html" target="_blank" rel="noopener" class="demo-link">Try Demo</a>
+    </nav>
+  </header>
 
-<header class="header">
-  <div class="logo">Spot</div>
-  <nav>
-    <a href="#demo">Demo</a>
-    <a href="#compare">Compare</a>
-  </nav>
-</header>
+  <main id="top">
+    <section class="hero scene" aria-label="Spot App hero">
+      <img class="hero-media" src="hero1.png" alt="Broadway-style stage scene with a spotlight isolating the main character" />
+      <div class="hero-vignette"></div>
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Projection lighting, simplified</p>
+        <h1>Turn any projector<br />into a follow spot.</h1>
+        <p class="lede">Spot App is built around one simple production problem. Sometimes you just need to put the focus where it belongs. In a perfect world, every school, church, and small venue would have a real follow spot and a trained operator ready to go. In the real world, most of us have an old projector, a tight budget, and somebody asking if we can make it work by Friday. Spot takes the projector you already have and turns it into a simple way to guide attention on stage.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#proof">Watch the concept</a>
+          <a class="button secondary" href="demo.html" target="_blank" rel="noopener">Try Demo</a>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">Scroll</div>
+    </section>
 
-<section class="hero">
-  <img src="hero1.png">
-  <div class="hero-text">
-    <h1>Turn any projector into a follow spot</h1>
-    <p>Spot App is built around one simple production problem. Sometimes you just need to put the focus where it belongs. In a perfect world, every school, church, and small venue would have a real follow spot and a trained operator ready to go. In the real world, most of us have an old projector, a tight budget, and somebody asking if we can make it work by Friday. Spot takes the projector you already have and turns it into a simple way to guide attention on stage.</p>
-  </div>
-</section>
+    <section id="compare" class="compare-section reveal">
+      <div class="section-heading">
+        <p class="eyebrow">The choice</p>
+        <h2>Buy another machine.<br />Or use the one you already have.</h2>
+      </div>
 
-<section id="compare" class="section">
-  <h2>Two ways to solve the same problem</h2>
-  <img src="hero2.png">
-  <p class="copy">A real follow spot can be great, but it is also expensive, bulky, and not always worth it for a venue that only needs it a few times a year. That is the gap Spot is trying to fill. Instead of buying another piece of gear that may sit in storage most of the year, Spot lets you use a projector you may already own and control the spotlight effect through software. It is not trying to replace a full professional lighting system. It is giving schools, churches, and smaller venues a practical option when the other option is having no follow spot at all.</p>
-</section>
+      <figure class="wide-card compare-card">
+        <img src="hero2.png" alt="Side-by-side comparison of a professional follow spot and a projector" />
+      </figure>
 
-<section id="demo" class="section video">
-  <video autoplay muted loop playsinline>
-    <source src="demo.mp4" type="video/mp4">
-  </video>
-  <p class="copy">The goal is for Spot to feel simple from the first time you touch it. Connect the device to a projector, aim it at the stage, and move the light with your finger. Drag it where you need it, adjust the size, soften the edge, change the color, and keep the focus where the moment needs it. No giant learning curve, no complicated booth setup, and no pretending every volunteer wants to become a lighting engineer overnight. If only the rest of the show was this easy.</p>
-</section>
+      <p class="body-copy">A real follow spot can be great, but it is also expensive, bulky, and not always worth it for a venue that only needs it a few times a year. That is the gap Spot is trying to fill. Instead of buying another piece of gear that may sit in storage most of the year, Spot lets you use a projector you may already own and control the spotlight effect through software. It is not trying to replace a full professional lighting system. It is giving schools, churches, and smaller venues a practical option when the other option is having no follow spot at all.</p>
+    </section>
 
+    <section id="proof" class="proof-section reveal">
+      <div class="proof-grid">
+        <div class="proof-copy">
+          <p class="eyebrow">See it work</p>
+          <h2>Move your finger.<br />Move the light.</h2>
+          <p class="body-copy align-left">The goal is for Spot to feel simple from the first time you touch it. Connect the device to a projector, aim it at the stage, and move the light with your finger. Drag it where you need it, adjust the size, soften the edge, change the color, and keep the focus where the moment needs it. No giant learning curve, no complicated booth setup, and no pretending every volunteer wants to become a lighting engineer overnight. If only the rest of the show was this easy.</p>
+        </div>
+        <div class="video-shell">
+          <video autoplay muted loop playsinline preload="metadata" poster="hero2.png">
+            <source src="demo.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature-strip reveal" aria-label="Spot App benefits">
+      <div class="feature">
+        <h3>Simple setup</h3>
+        <p>Connect to a projector and start testing the idea in your actual room.</p>
+      </div>
+      <div class="feature">
+        <h3>Touch-first control</h3>
+        <p>Move the spot directly instead of learning a complicated lighting workflow.</p>
+      </div>
+      <div class="feature">
+        <h3>Built for real venues</h3>
+        <p>Designed for schools, churches, and small spaces that need practical production tools.</p>
+      </div>
+    </section>
+
+    <section class="final-cta reveal">
+      <p class="eyebrow">Prototype the idea now</p>
+      <h2>Try the web demo.<br />Then test it on a real projector.</h2>
+      <a class="button primary" href="demo.html" target="_blank" rel="noopener">Open Demo</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© Spot App</span>
+    <span class="muted">Use what you already have.</span>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>
