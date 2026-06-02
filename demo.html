@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Spot App Demo</title>
 <style>
 :root{
@@ -12,20 +12,21 @@
   --line:rgba(255,255,255,.12);
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#000;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden}
-button{font:inherit}
+html,body{margin:0;width:100%;min-height:100%;background:#000;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{overflow:auto}
+button,a{font:inherit}
 
 #instructions{
   min-height:100vh;
   display:grid;
   place-items:center;
-  padding:clamp(24px,5vw,72px);
+  padding:clamp(24px,5vw,72px) clamp(18px,4vw,56px) 22vh;
   background:
     radial-gradient(circle at 50% 15%,rgba(255,255,255,.10),rgba(0,0,0,0) 38%),
     #000;
 }
 .instruction-card{
-  width:min(1100px,94vw);
+  width:min(1120px,94vw);
   min-height:52vh;
   border:1px solid var(--line);
   border-radius:34px;
@@ -35,9 +36,9 @@ button{font:inherit}
   text-align:center;
 }
 .eyebrow{margin:0 0 16px;color:var(--muted);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
-h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055em;font-weight:760}
-.intro{width:min(800px,90vw);margin:28px auto 0;color:rgba(245,245,247,.76);font-size:clamp(17px,2vw,24px);line-height:1.45}
-.rules{width:min(760px,90vw);margin:34px auto 0;display:grid;gap:10px;color:rgba(245,245,247,.66);font-size:clamp(15px,1.5vw,18px);line-height:1.45;text-align:left}
+h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.045em;font-weight:760}
+.intro{width:min(820px,90vw);margin:28px auto 0;color:rgba(245,245,247,.76);font-size:clamp(17px,2vw,24px);line-height:1.45}
+.rules{width:min(820px,90vw);margin:34px auto 0;display:grid;gap:10px;color:rgba(245,245,247,.70);font-size:clamp(15px,1.5vw,18px);line-height:1.45;text-align:left}
 .start-button{
   margin-top:42px;
   padding:18px 28px;
@@ -52,6 +53,16 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055e
   box-shadow:0 16px 40px rgba(255,255,255,.10);
 }
 .start-button:hover{transform:translateY(-1px);background:#f0f0f0}
+.home-button{
+  display:inline-flex;
+  margin-top:28px;
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  color:rgba(245,245,247,.76);
+  text-decoration:none;
+  background:rgba(255,255,255,.05);
+}
 .small-note{margin-top:18px;color:rgba(245,245,247,.42);font-size:13px}
 
 #stage{
@@ -61,6 +72,10 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055e
   background:#000;
   cursor:none;
   overflow:hidden;
+  touch-action:none;
+  overscroll-behavior:none;
+  -webkit-user-select:none;
+  user-select:none;
 }
 #stage.active{display:block}
 #spot{
@@ -70,8 +85,9 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055e
   transform:translate(-50%,-50%);
   border-radius:50%;
   pointer-events:none;
-  background:radial-gradient(circle,rgba(255,255,255,1) 0%,rgba(255,255,255,.96) 36%,rgba(255,255,255,.72) 54%,rgba(255,255,255,.20) 73%,rgba(255,255,255,0) 100%);
-  filter:blur(0px);
+  opacity:1;
+  mix-blend-mode:screen;
+  will-change:left,top,width,height,opacity,filter,background,box-shadow;
 }
 #demoImageSpot{
   position:absolute;
@@ -81,6 +97,10 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055e
   pointer-events:none;
   object-fit:contain;
   display:none;
+  background:transparent;
+  border-radius:50%;
+  overflow:hidden;
+  clip-path:circle(50% at 50% 50%);
   filter:drop-shadow(0 0 26px rgba(255,255,255,.32));
 }
 #hud{
@@ -115,7 +135,7 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055e
 #expired p{margin:18px auto 0;color:rgba(245,245,247,.68);font-size:18px;line-height:1.5;max-width:560px}
 
 @media(max-width:700px){
-  .rules{text-align:center}
+  .rules{text-align:left}
   .start-button{width:100%;max-width:440px}
 }
 </style>
@@ -126,15 +146,17 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.055e
   <div class="instruction-card">
     <p class="eyebrow">Spot App Web Demo</p>
     <h1>Test the idea<br>on your projector.</h1>
-    <p class="intro">This web demo is for checking brightness, placement, and control feel in your actual room. It is not intended for running a real event.</p>
+    <p class="intro">This demo lets you test brightness, placement, control feel, and basic adjustments in your actual room. It starts with a short branded test spot, then unlocks the normal white spot for a limited session.</p>
     <div class="rules">
-      <div>• The demo opens in fullscreen.</div>
-      <div>• The first 10 seconds show a branded demo spot.</div>
-      <div>• After that, you get 5 minutes with the normal white spot.</div>
-      <div>• Move with mouse or trackpad. Scroll to resize.</div>
+      <div>• Click or tap: turn the spot on and off.</div>
+      <div>• Mouse, trackpad, or 1 finger: move the spot.</div>
+      <div>• Scroll wheel or 2 fingers up/down: resize the spot.</div>
+      <div>• Right click + scroll or 3 fingers up/down: soften or sharpen the edge.</div>
+      <div>• Number keys: change white tone. R, G, B, Y, C, M, W: quick colors.</div>
     </div>
     <button class="start-button" id="startBtn">CLICK HERE TO BEGIN 5 MINUTE DEMO</button>
     <div class="small-note">Press Escape anytime to leave fullscreen.</div>
+    <a class="home-button" href="index.html">Back to home page</a>
   </div>
 </section>
 
@@ -166,11 +188,52 @@ const startBtn = document.getElementById('startBtn');
 let x = window.innerWidth / 2;
 let y = window.innerHeight / 2;
 let size = Math.min(window.innerWidth, window.innerHeight) * 0.28;
+let softness = 28;
+let spotOn = true;
+let color = { r:255, g:255, b:255 };
 let demoTimer = null;
 let brandedTimer = null;
 let countdownTimer = null;
 let remaining = DEMO_SECONDS;
 let brandedMode = false;
+let rightMouseDown = false;
+let lastTouchY = null;
+let lastTouchX = null;
+
+const whiteTemps = {
+  '1': { r:255, g:197, b:143 },
+  '2': { r:255, g:214, b:170 },
+  '3': { r:255, g:235, b:210 },
+  '4': { r:255, g:255, b:255 },
+  '5': { r:212, g:230, b:255 },
+  '6': { r:190, g:215, b:255 }
+};
+
+const colorKeys = {
+  r:{ r:255, g:55, b:55 },
+  g:{ r:80, g:255, b:120 },
+  b:{ r:80, g:150, b:255 },
+  y:{ r:255, g:230, b:80 },
+  c:{ r:80, g:255, b:255 },
+  m:{ r:255, g:80, b:220 },
+  w:{ r:255, g:255, b:255 }
+};
+
+function clamp(value, min, max){ return Math.max(min, Math.min(max, value)); }
+
+function rgba(alpha){ return `rgba(${color.r},${color.g},${color.b},${alpha})`; }
+
+function applySpotLook(){
+  const hard = clamp(softness, 0, 100);
+  const solid = clamp(44 - hard * 0.18, 18, 44);
+  const fade1 = clamp(62 + hard * 0.16, 62, 78);
+  const fade2 = clamp(76 + hard * 0.18, 76, 96);
+  spot.style.opacity = spotOn ? '1' : '0';
+  spot.style.background = `radial-gradient(circle, ${rgba(1)} 0%, ${rgba(.96)} ${solid}%, ${rgba(.70)} ${fade1}%, ${rgba(.22)} ${fade2}%, rgba(${color.r},${color.g},${color.b},0) 100%)`;
+  spot.style.filter = `blur(${hard * 0.10}px)`;
+  spot.style.boxShadow = `0 0 ${Math.round(size * 0.45)}px ${rgba(.24)}`;
+  demoImageSpot.style.opacity = spotOn ? '1' : '0';
+}
 
 function applyPosition(){
   spot.style.left = x + 'px';
@@ -182,6 +245,7 @@ function applyPosition(){
   demoImageSpot.style.top = y + 'px';
   demoImageSpot.style.width = (size * 1.18) + 'px';
   demoImageSpot.style.height = (size * 1.18) + 'px';
+  applySpotLook();
 }
 
 function formatTime(sec){
@@ -194,12 +258,14 @@ function setNormalSpot(){
   brandedMode = false;
   demoImageSpot.style.display = 'none';
   spot.style.display = 'block';
+  applySpotLook();
 }
 
 function setBrandedSpot(){
   brandedMode = true;
   spot.style.display = 'none';
   demoImageSpot.style.display = 'block';
+  applySpotLook();
 }
 
 function resetTimers(){
@@ -211,13 +277,17 @@ function resetTimers(){
   countdownTimer = null;
 }
 
-function endDemo(){
-  resetTimers();
-  if(document.fullscreenElement){
-    document.exitFullscreen().catch(()=>{});
-  }
+function showInstructions(){
+  document.body.style.overflow = 'auto';
   stage.classList.remove('active');
   instructions.style.display = 'grid';
+  setNormalSpot();
+}
+
+function endDemo(){
+  resetTimers();
+  if(document.fullscreenElement){ document.exitFullscreen().catch(()=>{}); }
+  showInstructions();
   expired.style.display = 'grid';
   setTimeout(()=>{ expired.style.display = 'none'; }, 1800);
 }
@@ -226,15 +296,17 @@ async function beginDemo(){
   resetTimers();
   expired.style.display = 'none';
   instructions.style.display = 'none';
+  document.body.style.overflow = 'hidden';
   stage.classList.add('active');
   x = window.innerWidth / 2;
   y = window.innerHeight / 2;
   size = Math.min(window.innerWidth, window.innerHeight) * 0.28;
+  softness = 28;
+  spotOn = true;
+  color = { r:255, g:255, b:255 };
   applyPosition();
 
-  try{
-    await stage.requestFullscreen();
-  }catch(e){ }
+  try{ await stage.requestFullscreen(); }catch(e){ }
 
   setBrandedSpot();
   hud.textContent = 'Demo loading';
@@ -254,6 +326,11 @@ async function beginDemo(){
 
 startBtn.addEventListener('click', beginDemo);
 
+stage.addEventListener('contextmenu', e => e.preventDefault());
+stage.addEventListener('mousedown', e => { if(e.button === 2) rightMouseDown = true; });
+stage.addEventListener('mouseup', e => { if(e.button === 2) rightMouseDown = false; });
+stage.addEventListener('mouseleave', () => rightMouseDown = false);
+
 window.addEventListener('mousemove', (e)=>{
   if(!stage.classList.contains('active')) return;
   x = e.clientX;
@@ -261,12 +338,97 @@ window.addEventListener('mousemove', (e)=>{
   applyPosition();
 });
 
+stage.addEventListener('click', (e)=>{
+  if(e.button !== 0) return;
+  spotOn = !spotOn;
+  applySpotLook();
+});
+
 window.addEventListener('wheel', (e)=>{
   if(!stage.classList.contains('active')) return;
   e.preventDefault();
-  size += -e.deltaY * 0.35;
-  size = Math.max(60, Math.min(Math.min(window.innerWidth, window.innerHeight) * 0.95, size));
+  if(rightMouseDown){
+    softness += e.deltaY * 0.05;
+    softness = clamp(softness, 0, 100);
+  }else{
+    size += -e.deltaY * 0.35;
+    size = clamp(size, 60, Math.min(window.innerWidth, window.innerHeight) * 0.95);
+  }
   applyPosition();
+}, { passive:false });
+
+window.addEventListener('keydown', (e)=>{
+  if(!stage.classList.contains('active')) return;
+  const key = e.key.toLowerCase();
+  if(key === 'escape') return;
+  if(key === ' '){
+    e.preventDefault();
+    spotOn = !spotOn;
+    applySpotLook();
+  }
+  if(whiteTemps[key]){
+    color = whiteTemps[key];
+    applySpotLook();
+  }
+  if(colorKeys[key]){
+    color = colorKeys[key];
+    applySpotLook();
+  }
+});
+
+function averageTouch(touches){
+  let ax = 0, ay = 0;
+  for(const t of touches){ ax += t.clientX; ay += t.clientY; }
+  return { x: ax / touches.length, y: ay / touches.length };
+}
+
+stage.addEventListener('touchstart', (e)=>{
+  if(!stage.classList.contains('active')) return;
+  e.preventDefault();
+  const avg = averageTouch(e.touches);
+  lastTouchX = avg.x;
+  lastTouchY = avg.y;
+  if(e.touches.length === 1){
+    spotOn = true;
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
+    applyPosition();
+  }
+}, { passive:false });
+
+stage.addEventListener('touchmove', (e)=>{
+  if(!stage.classList.contains('active')) return;
+  e.preventDefault();
+  const touches = e.touches;
+  const avg = averageTouch(touches);
+  const dx = lastTouchX === null ? 0 : avg.x - lastTouchX;
+  const dy = lastTouchY === null ? 0 : avg.y - lastTouchY;
+
+  if(touches.length === 1){
+    x = touches[0].clientX;
+    y = touches[0].clientY;
+  }else if(touches.length === 2){
+    size += -dy * 1.25;
+    size = clamp(size, 60, Math.min(window.innerWidth, window.innerHeight) * 0.95);
+    x = avg.x;
+    y = avg.y;
+  }else if(touches.length >= 3){
+    softness += dy * 0.32;
+    softness = clamp(softness, 0, 100);
+    const tempShift = dx * 0.75;
+    color.r = clamp(color.r + tempShift, 170, 255);
+    color.b = clamp(color.b - tempShift, 170, 255);
+  }
+
+  lastTouchX = avg.x;
+  lastTouchY = avg.y;
+  applyPosition();
+}, { passive:false });
+
+stage.addEventListener('touchend', (e)=>{
+  const avg = e.touches.length ? averageTouch(e.touches) : { x:null, y:null };
+  lastTouchX = avg.x;
+  lastTouchY = avg.y;
 }, { passive:false });
 
 window.addEventListener('resize', applyPosition);
@@ -274,9 +436,7 @@ window.addEventListener('resize', applyPosition);
 document.addEventListener('fullscreenchange', ()=>{
   if(!document.fullscreenElement && stage.classList.contains('active')){
     resetTimers();
-    stage.classList.remove('active');
-    instructions.style.display = 'grid';
-    setNormalSpot();
+    showInstructions();
   }
 });
 
