@@ -21,9 +21,7 @@ button,a{font:inherit}
   display:grid;
   place-items:center;
   padding:clamp(24px,5vw,72px) clamp(18px,4vw,56px) 22vh;
-  background:
-    radial-gradient(circle at 50% 15%,rgba(255,255,255,.10),rgba(0,0,0,0) 38%),
-    #000;
+  background:radial-gradient(circle at 50% 15%,rgba(255,255,255,.10),rgba(0,0,0,0) 38%), #000;
 }
 .instruction-card{
   width:min(1120px,94vw);
@@ -39,114 +37,46 @@ button,a{font:inherit}
 h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.045em;font-weight:760}
 .intro{width:min(820px,90vw);margin:28px auto 0;color:rgba(245,245,247,.76);font-size:clamp(17px,2vw,24px);line-height:1.45}
 .rules{width:min(820px,90vw);margin:34px auto 0;display:grid;gap:10px;color:rgba(245,245,247,.70);font-size:clamp(15px,1.5vw,18px);line-height:1.45;text-align:left}
-.start-button{
-  margin-top:42px;
-  padding:18px 28px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.22);
-  background:#fff;
-  color:#000;
-  font-weight:800;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  cursor:pointer;
-  box-shadow:0 16px 40px rgba(255,255,255,.10);
-}
+.start-button{margin-top:42px;padding:18px 28px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:#fff;color:#000;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 16px 40px rgba(255,255,255,.10)}
 .start-button:hover{transform:translateY(-1px);background:#f0f0f0}
-.home-button{
-  display:inline-flex;
-  margin-top:28px;
-  padding:12px 18px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.14);
-  color:rgba(245,245,247,.76);
-  text-decoration:none;
-  background:rgba(255,255,255,.05);
-}
+.home-button{display:inline-flex;margin-top:28px;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:rgba(245,245,247,.76);text-decoration:none;background:rgba(255,255,255,.05)}
 .small-note{margin-top:18px;color:rgba(245,245,247,.42);font-size:13px}
 
+#loadingScreen{
+  position:fixed; inset:0; display:none; place-items:center; background:#000; z-index:50; overflow:hidden;
+}
+#loadingScreen.active{display:grid}
+#loadingScreen img{
+  width:min(44vmin,420px); height:min(44vmin,420px); object-fit:contain; background:transparent; border-radius:50%; clip-path:circle(50% at 50% 50%);
+  filter:drop-shadow(0 0 28px rgba(255,255,255,.32));
+}
+.loading-note{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.45);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+
 #stage{
-  position:fixed;
-  inset:0;
-  display:none;
-  background:#000;
-  cursor:none;
-  overflow:hidden;
-  touch-action:none;
-  overscroll-behavior:none;
-  -webkit-user-select:none;
-  user-select:none;
+  position:fixed; inset:0; display:none; background:#000; cursor:none; overflow:hidden; touch-action:none; overscroll-behavior:none; -webkit-user-select:none; user-select:none;
 }
 #stage.active{display:block}
 #spot{
-  position:absolute;
-  left:50%;top:50%;
-  width:28vmin;height:28vmin;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  pointer-events:none;
-  opacity:1;
-  mix-blend-mode:screen;
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; opacity:0; mix-blend-mode:screen;
   will-change:left,top,width,height,opacity,filter,background,box-shadow;
 }
-#demoImageSpot{
-  position:absolute;
-  left:50%;top:50%;
-  width:36vmin;height:36vmin;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  object-fit:contain;
-  display:none;
-  background:transparent;
-  border-radius:50%;
-  overflow:hidden;
-  clip-path:circle(50% at 50% 50%);
-  filter:drop-shadow(0 0 26px rgba(255,255,255,.32));
-}
-#hud{
-  position:fixed;
-  left:18px;
-  bottom:16px;
-  z-index:5;
-  padding:10px 14px;
-  border-radius:999px;
-  color:rgba(255,255,255,.58);
-  background:rgba(0,0,0,.26);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.08);
-  font-size:12px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  user-select:none;
-}
-#expired{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:20;
-  place-items:center;
-  background:rgba(0,0,0,.88);
-  text-align:center;
-  padding:24px;
-}
+#logo{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));width:min(10vw,10vh,110px);max-width:10%;opacity:.92;pointer-events:none;z-index:5;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
+#hint{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:2rem;color:rgba(255,255,255,.28);font-size:clamp(13px,2vw,22px);line-height:1.5;text-align:center;pointer-events:none;transition:opacity 180ms ease}
+#hint.hidden{opacity:0}
+#hud{position:fixed;left:18px;bottom:16px;z-index:6;padding:10px 14px;border-radius:999px;color:rgba(255,255,255,.58);background:rgba(0,0,0,.26);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);font-size:12px;letter-spacing:.08em;text-transform:uppercase;user-select:none}
+#expired{display:none;position:fixed;inset:0;z-index:60;place-items:center;background:rgba(0,0,0,.88);text-align:center;padding:24px}
 #expired .box{width:min(740px,92vw);border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:42px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
 #expired h2{margin:0;font-size:clamp(34px,5vw,64px);letter-spacing:-.045em;line-height:1}
 #expired p{margin:18px auto 0;color:rgba(245,245,247,.68);font-size:18px;line-height:1.5;max-width:560px}
-
-@media(max-width:700px){
-  .rules{text-align:left}
-  .start-button{width:100%;max-width:440px}
-}
+@media(max-width:700px){.start-button{width:100%;max-width:440px}}
 </style>
 </head>
 <body>
-
 <section id="instructions">
   <div class="instruction-card">
     <p class="eyebrow">Spot App Web Demo</p>
     <h1>Test the idea<br>on your projector.</h1>
-    <p class="intro">This demo lets you test brightness, placement, control feel, and basic adjustments in your actual room. It starts with a short branded test spot, then unlocks the normal white spot for a limited session.</p>
+    <p class="intro">This demo lets you test brightness, placement, control feel, and basic adjustments in your actual room. It starts with a short branded test screen, then unlocks the normal spot for a limited session.</p>
     <div class="rules">
       <div>• Click or tap: turn the spot on and off.</div>
       <div>• Mouse, trackpad, or 1 finger: move the spot.</div>
@@ -160,287 +90,84 @@ h1{margin:0;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:-.045e
   </div>
 </section>
 
-<section id="stage" aria-label="Spot App demo stage">
-  <div id="spot"></div>
-  <img id="demoImageSpot" src="demo-loading.png" alt="Spot App demo branded spotlight" />
-  <div id="hud">Demo mode</div>
+<section id="loadingScreen">
+  <img src="demo-loading.png" alt="Spot App demo loading" />
+  <div class="loading-note">Demo loading</div>
 </section>
 
-<div id="expired">
-  <div class="box">
-    <h2>Demo ended.</h2>
-    <p>You can start another demo session, or use the full Spot App for real events.</p>
-  </div>
-</div>
+<section id="stage" aria-label="Spot App demo stage">
+  <div id="spot"></div>
+  <img id="logo" src="logo.webp" alt="Spot App logo" />
+  <div id="hint">Click or tap to turn the spot on.<br>Move to aim. Scroll or touch gestures adjust the spot.</div>
+  <div id="hud">Demo 5:00</div>
+</section>
+
+<div id="expired"><div class="box"><h2>Demo ended.</h2><p>You can start another demo session, or use the full Spot App for real events.</p></div></div>
 
 <script>
 const DEMO_SECONDS = 5 * 60;
-const BRANDED_SECONDS = 10;
-
+const LOADING_SECONDS = 5;
 const instructions = document.getElementById('instructions');
+const loadingScreen = document.getElementById('loadingScreen');
 const stage = document.getElementById('stage');
 const spot = document.getElementById('spot');
-const demoImageSpot = document.getElementById('demoImageSpot');
+const hint = document.getElementById('hint');
 const hud = document.getElementById('hud');
 const expired = document.getElementById('expired');
 const startBtn = document.getElementById('startBtn');
-
-let x = window.innerWidth / 2;
-let y = window.innerHeight / 2;
-let size = Math.min(window.innerWidth, window.innerHeight) * 0.28;
-let softness = 28;
-let spotOn = true;
-let color = { r:255, g:255, b:255 };
-let demoTimer = null;
-let brandedTimer = null;
-let countdownTimer = null;
-let remaining = DEMO_SECONDS;
-let brandedMode = false;
-let rightMouseDown = false;
-let lastTouchY = null;
-let lastTouchX = null;
-
-const whiteTemps = {
-  '1': { r:255, g:197, b:143 },
-  '2': { r:255, g:214, b:170 },
-  '3': { r:255, g:235, b:210 },
-  '4': { r:255, g:255, b:255 },
-  '5': { r:212, g:230, b:255 },
-  '6': { r:190, g:215, b:255 }
-};
-
-const colorKeys = {
-  r:{ r:255, g:55, b:55 },
-  g:{ r:80, g:255, b:120 },
-  b:{ r:80, g:150, b:255 },
-  y:{ r:255, g:230, b:80 },
-  c:{ r:80, g:255, b:255 },
-  m:{ r:255, g:80, b:220 },
-  w:{ r:255, g:255, b:255 }
-};
-
-function clamp(value, min, max){ return Math.max(min, Math.min(max, value)); }
-
-function rgba(alpha){ return `rgba(${color.r},${color.g},${color.b},${alpha})`; }
-
-function applySpotLook(){
-  const hard = clamp(softness, 0, 100);
-  const solid = clamp(44 - hard * 0.18, 18, 44);
-  const fade1 = clamp(62 + hard * 0.16, 62, 78);
-  const fade2 = clamp(76 + hard * 0.18, 76, 96);
-  spot.style.opacity = spotOn ? '1' : '0';
-  spot.style.background = `radial-gradient(circle, ${rgba(1)} 0%, ${rgba(.96)} ${solid}%, ${rgba(.70)} ${fade1}%, ${rgba(.22)} ${fade2}%, rgba(${color.r},${color.g},${color.b},0) 100%)`;
-  spot.style.filter = `blur(${hard * 0.10}px)`;
-  spot.style.boxShadow = `0 0 ${Math.round(size * 0.45)}px ${rgba(.24)}`;
-  demoImageSpot.style.opacity = spotOn ? '1' : '0';
+let x=window.innerWidth/2, y=window.innerHeight/2, size=Math.min(window.innerWidth,window.innerHeight)*0.28;
+let softness=34, opacity=1, spotOn=false, color={r:255,g:255,b:255};
+let demoTimer=null, countdownTimer=null, loadingTimer=null, remaining=DEMO_SECONDS;
+let rightMouseDown=false, lastTouchX=null, lastTouchY=null;
+const whiteTemps={'1':{r:255,g:197,b:143},'2':{r:255,g:214,b:170},'3':{r:255,g:235,b:210},'4':{r:255,g:255,b:255},'5':{r:212,g:230,b:255},'6':{r:190,g:215,b:255}};
+const colorKeys={r:{r:255,g:55,b:55},g:{r:80,g:255,b:120},b:{r:80,g:150,b:255},y:{r:255,g:230,b:80},c:{r:80,g:255,b:255},m:{r:255,g:80,b:220},w:{r:255,g:255,b:255}};
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function rgba(a){return `rgba(${color.r},${color.g},${color.b},${a})`;}
+function updateSpot(){
+  const hard=clamp(softness,0,100);
+  const solid=clamp(58-hard*.22,28,58);
+  const fade1=clamp(72+hard*.08,72,84);
+  const fade2=clamp(88+hard*.07,88,98);
+  spot.style.left=x+'px'; spot.style.top=y+'px'; spot.style.width=size+'px'; spot.style.height=size+'px';
+  spot.style.opacity=spotOn?opacity:0;
+  spot.style.background=`radial-gradient(circle, ${rgba(1)} 0%, ${rgba(1)} ${solid}%, ${rgba(.82)} ${fade1}%, ${rgba(.34)} ${fade2}%, rgba(${color.r},${color.g},${color.b},0) 100%)`;
+  spot.style.filter=`blur(${hard*.055}px)`;
+  spot.style.boxShadow=`0 0 ${Math.round(size*.35)}px ${rgba(.20)}`;
+  hint.classList.toggle('hidden', spotOn);
 }
-
-function applyPosition(){
-  spot.style.left = x + 'px';
-  spot.style.top = y + 'px';
-  spot.style.width = size + 'px';
-  spot.style.height = size + 'px';
-
-  demoImageSpot.style.left = x + 'px';
-  demoImageSpot.style.top = y + 'px';
-  demoImageSpot.style.width = (size * 1.18) + 'px';
-  demoImageSpot.style.height = (size * 1.18) + 'px';
-  applySpotLook();
+function formatTime(sec){const m=Math.floor(sec/60),s=sec%60;return `${m}:${String(s).padStart(2,'0')}`;}
+function clearTimers(){if(demoTimer)clearTimeout(demoTimer);if(countdownTimer)clearInterval(countdownTimer);if(loadingTimer)clearTimeout(loadingTimer);demoTimer=countdownTimer=loadingTimer=null;}
+function showInstructions(){document.body.style.overflow='auto';stage.classList.remove('active');loadingScreen.classList.remove('active');instructions.style.display='grid';spotOn=false;updateSpot();}
+function endDemo(){clearTimers();if(document.fullscreenElement){document.exitFullscreen().catch(()=>{});}showInstructions();expired.style.display='grid';setTimeout(()=>expired.style.display='none',1800);}
+async function startDemo(){
+  clearTimers(); expired.style.display='none'; instructions.style.display='none'; document.body.style.overflow='hidden';
+  loadingScreen.classList.add('active');
+  try{await loadingScreen.requestFullscreen();}catch(e){}
+  loadingTimer=setTimeout(()=>{
+    loadingScreen.classList.remove('active'); stage.classList.add('active');
+    if(!document.fullscreenElement){stage.requestFullscreen().catch(()=>{});}
+    x=window.innerWidth/2; y=window.innerHeight/2; size=Math.min(window.innerWidth,window.innerHeight)*.28; softness=34; opacity=1; color={r:255,g:255,b:255}; spotOn=false; remaining=DEMO_SECONDS;
+    hud.textContent='Demo '+formatTime(remaining); updateSpot();
+    countdownTimer=setInterval(()=>{remaining--; hud.textContent='Demo '+formatTime(Math.max(remaining,0)); if(remaining<=0)endDemo();},1000);
+    demoTimer=setTimeout(endDemo,DEMO_SECONDS*1000);
+  },LOADING_SECONDS*1000);
 }
-
-function formatTime(sec){
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${m}:${String(s).padStart(2,'0')}`;
-}
-
-function setNormalSpot(){
-  brandedMode = false;
-  demoImageSpot.style.display = 'none';
-  spot.style.display = 'block';
-  applySpotLook();
-}
-
-function setBrandedSpot(){
-  brandedMode = true;
-  spot.style.display = 'none';
-  demoImageSpot.style.display = 'block';
-  applySpotLook();
-}
-
-function resetTimers(){
-  if(demoTimer) clearTimeout(demoTimer);
-  if(brandedTimer) clearTimeout(brandedTimer);
-  if(countdownTimer) clearInterval(countdownTimer);
-  demoTimer = null;
-  brandedTimer = null;
-  countdownTimer = null;
-}
-
-function showInstructions(){
-  document.body.style.overflow = 'auto';
-  stage.classList.remove('active');
-  instructions.style.display = 'grid';
-  setNormalSpot();
-}
-
-function endDemo(){
-  resetTimers();
-  if(document.fullscreenElement){ document.exitFullscreen().catch(()=>{}); }
-  showInstructions();
-  expired.style.display = 'grid';
-  setTimeout(()=>{ expired.style.display = 'none'; }, 1800);
-}
-
-async function beginDemo(){
-  resetTimers();
-  expired.style.display = 'none';
-  instructions.style.display = 'none';
-  document.body.style.overflow = 'hidden';
-  stage.classList.add('active');
-  x = window.innerWidth / 2;
-  y = window.innerHeight / 2;
-  size = Math.min(window.innerWidth, window.innerHeight) * 0.28;
-  softness = 28;
-  spotOn = true;
-  color = { r:255, g:255, b:255 };
-  applyPosition();
-
-  try{ await stage.requestFullscreen(); }catch(e){ }
-
-  setBrandedSpot();
-  hud.textContent = 'Demo loading';
-
-  brandedTimer = setTimeout(()=>{
-    setNormalSpot();
-    remaining = DEMO_SECONDS;
-    hud.textContent = 'Demo ' + formatTime(remaining);
-    countdownTimer = setInterval(()=>{
-      remaining--;
-      hud.textContent = 'Demo ' + formatTime(Math.max(remaining,0));
-      if(remaining <= 0) endDemo();
-    }, 1000);
-    demoTimer = setTimeout(endDemo, DEMO_SECONDS * 1000);
-  }, BRANDED_SECONDS * 1000);
-}
-
-startBtn.addEventListener('click', beginDemo);
-
-stage.addEventListener('contextmenu', e => e.preventDefault());
-stage.addEventListener('mousedown', e => { if(e.button === 2) rightMouseDown = true; });
-stage.addEventListener('mouseup', e => { if(e.button === 2) rightMouseDown = false; });
-stage.addEventListener('mouseleave', () => rightMouseDown = false);
-
-window.addEventListener('mousemove', (e)=>{
-  if(!stage.classList.contains('active')) return;
-  x = e.clientX;
-  y = e.clientY;
-  applyPosition();
-});
-
-stage.addEventListener('click', (e)=>{
-  if(e.button !== 0) return;
-  spotOn = !spotOn;
-  applySpotLook();
-});
-
-window.addEventListener('wheel', (e)=>{
-  if(!stage.classList.contains('active')) return;
-  e.preventDefault();
-  if(rightMouseDown){
-    softness += e.deltaY * 0.05;
-    softness = clamp(softness, 0, 100);
-  }else{
-    size += -e.deltaY * 0.35;
-    size = clamp(size, 60, Math.min(window.innerWidth, window.innerHeight) * 0.95);
-  }
-  applyPosition();
-}, { passive:false });
-
-window.addEventListener('keydown', (e)=>{
-  if(!stage.classList.contains('active')) return;
-  const key = e.key.toLowerCase();
-  if(key === 'escape') return;
-  if(key === ' '){
-    e.preventDefault();
-    spotOn = !spotOn;
-    applySpotLook();
-  }
-  if(whiteTemps[key]){
-    color = whiteTemps[key];
-    applySpotLook();
-  }
-  if(colorKeys[key]){
-    color = colorKeys[key];
-    applySpotLook();
-  }
-});
-
-function averageTouch(touches){
-  let ax = 0, ay = 0;
-  for(const t of touches){ ax += t.clientX; ay += t.clientY; }
-  return { x: ax / touches.length, y: ay / touches.length };
-}
-
-stage.addEventListener('touchstart', (e)=>{
-  if(!stage.classList.contains('active')) return;
-  e.preventDefault();
-  const avg = averageTouch(e.touches);
-  lastTouchX = avg.x;
-  lastTouchY = avg.y;
-  if(e.touches.length === 1){
-    spotOn = true;
-    x = e.touches[0].clientX;
-    y = e.touches[0].clientY;
-    applyPosition();
-  }
-}, { passive:false });
-
-stage.addEventListener('touchmove', (e)=>{
-  if(!stage.classList.contains('active')) return;
-  e.preventDefault();
-  const touches = e.touches;
-  const avg = averageTouch(touches);
-  const dx = lastTouchX === null ? 0 : avg.x - lastTouchX;
-  const dy = lastTouchY === null ? 0 : avg.y - lastTouchY;
-
-  if(touches.length === 1){
-    x = touches[0].clientX;
-    y = touches[0].clientY;
-  }else if(touches.length === 2){
-    size += -dy * 1.25;
-    size = clamp(size, 60, Math.min(window.innerWidth, window.innerHeight) * 0.95);
-    x = avg.x;
-    y = avg.y;
-  }else if(touches.length >= 3){
-    softness += dy * 0.32;
-    softness = clamp(softness, 0, 100);
-    const tempShift = dx * 0.75;
-    color.r = clamp(color.r + tempShift, 170, 255);
-    color.b = clamp(color.b - tempShift, 170, 255);
-  }
-
-  lastTouchX = avg.x;
-  lastTouchY = avg.y;
-  applyPosition();
-}, { passive:false });
-
-stage.addEventListener('touchend', (e)=>{
-  const avg = e.touches.length ? averageTouch(e.touches) : { x:null, y:null };
-  lastTouchX = avg.x;
-  lastTouchY = avg.y;
-}, { passive:false });
-
-window.addEventListener('resize', applyPosition);
-
-document.addEventListener('fullscreenchange', ()=>{
-  if(!document.fullscreenElement && stage.classList.contains('active')){
-    resetTimers();
-    showInstructions();
-  }
-});
-
-applyPosition();
+startBtn.addEventListener('click',startDemo);
+stage.addEventListener('contextmenu',e=>e.preventDefault());
+stage.addEventListener('mousedown',e=>{if(e.button===2)rightMouseDown=true;});
+stage.addEventListener('mouseup',e=>{if(e.button===2)rightMouseDown=false;});
+stage.addEventListener('mouseleave',()=>rightMouseDown=false);
+window.addEventListener('mousemove',e=>{if(!stage.classList.contains('active'))return;x=e.clientX;y=e.clientY;updateSpot();});
+stage.addEventListener('click',e=>{if(e.button!==0)return;spotOn=!spotOn;updateSpot();});
+window.addEventListener('wheel',e=>{if(!stage.classList.contains('active'))return;e.preventDefault();if(rightMouseDown){softness=clamp(softness+e.deltaY*.05,0,100);}else{size=clamp(size+(-e.deltaY*.35),60,Math.min(window.innerWidth,window.innerHeight)*.95);}updateSpot();},{passive:false});
+window.addEventListener('keydown',e=>{if(!stage.classList.contains('active'))return;const k=e.key.toLowerCase();if(k===' '){e.preventDefault();spotOn=!spotOn;updateSpot();}if(whiteTemps[k]){color=whiteTemps[k];spotOn=true;updateSpot();}if(colorKeys[k]){color=colorKeys[k];spotOn=true;updateSpot();}});
+function avg(t){let ax=0,ay=0;for(const p of t){ax+=p.clientX;ay+=p.clientY;}return{x:ax/t.length,y:ay/t.length};}
+stage.addEventListener('touchstart',e=>{if(!stage.classList.contains('active'))return;e.preventDefault();const a=avg(e.touches);lastTouchX=a.x;lastTouchY=a.y;if(e.touches.length===1){spotOn=true;x=e.touches[0].clientX;y=e.touches[0].clientY;updateSpot();}},{passive:false});
+stage.addEventListener('touchmove',e=>{if(!stage.classList.contains('active'))return;e.preventDefault();const touches=e.touches,a=avg(touches),dx=lastTouchX===null?0:a.x-lastTouchX,dy=lastTouchY===null?0:a.y-lastTouchY;if(touches.length===1){x=touches[0].clientX;y=touches[0].clientY;}else if(touches.length===2){size=clamp(size+(-dy*1.25),60,Math.min(window.innerWidth,window.innerHeight)*.95);x=a.x;y=a.y;}else if(touches.length>=3){softness=clamp(softness+dy*.32,0,100);const shift=dx*.75;color.r=clamp(color.r+shift,170,255);color.b=clamp(color.b-shift,170,255);}lastTouchX=a.x;lastTouchY=a.y;updateSpot();},{passive:false});
+stage.addEventListener('touchend',e=>{if(e.touches.length){const a=avg(e.touches);lastTouchX=a.x;lastTouchY=a.y;}else{lastTouchX=lastTouchY=null;}},{passive:false});
+window.addEventListener('resize',updateSpot);
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&(stage.classList.contains('active')||loadingScreen.classList.contains('active'))){clearTimers();showInstructions();}});
+updateSpot();
 </script>
 </body>
 </html>
